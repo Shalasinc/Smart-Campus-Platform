@@ -1,20 +1,18 @@
 # Smart Campus Platform
 
-A microservices-based platform for managing campus resources, bookings, marketplace, exams, and more.
+<table>
+  <tr>
+    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/333c9623-dc65-477b-bb12-2592cc13cab9" width="400"></td>
+    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/d5313bcb-7fd4-409b-a91d-138c16be00ef" width="400"></td>
+  </tr>
+  <tr>
+    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/258311cd-86b3-4289-808d-e00f9fa7f9f0" width="400"></td>
+    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/26809294-d6b9-4e26-93b7-8ae029c04bf4" width="400"></td>
+  </tr>
+</table>
 
-## Project Structure
+https://www.figma.com/board/IIbpdJCVx2XHQXytHNSfRx/Welcome-to-FigJam?node-id=0-1&t=ipcFRu2oPIupW2ir-1
 
-This project follows a microservices architecture with the following services:
-- Auth Service
-- User Service
-- Resource Booking Service
-- Marketplace Service
-- Exam Service
-- Notification Service
-- Dashboard Service
-- Shuttle Tracking Service
-
-## Getting Started
 # فاز ۱ — وظایف تیم‌ها
 
 ## 🟦 تیم 1 — Architecture & API
@@ -22,8 +20,7 @@ This project follows a microservices architecture with the following services:
 - طراحی C4 diagrams (Context, Container, Component) برای کل سیستم
 - نوشتن تصمیمات اصلی معماری (ADRs)
 - طراحی APIهای اصلی سرویس‌ها
-- هماهنگی بین تیم‌ها  
-> این تیم برای تحویل هفته ۱ و ۲ ضروری است.
+- هماهنگی بین تیم‌ها
 
 ## 🟩 تیم 2 — Database & Multi-Tenancy (Schema-per-Tenant)
 **مسئولیت‌ها:**
@@ -46,7 +43,9 @@ This project follows a microservices architecture with the following services:
 - Prometheus و Grafana
 - Docker-compose کامل پروژه
 
-# Architectural Decision Record – Core Technology Stack
+------------------------------
+
+# Architectural Decision
 
 ## 1. Context
 پلتفرم باید شامل چندین سرویس مستقل با بار متفاوت، نیازمندی‌های تراکنشی (رزرو/پرداخت)، جریان‌های رویدادمحور، الگوهای مقاومتی، و Multi-Tenancy باشد.  
