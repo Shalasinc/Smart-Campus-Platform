@@ -1,167 +1,73 @@
-# Smart Campus Platform 
-https://shalasinc.github.io/
+# Welcome to your Lovable project
 
-<table>
-  <tr>
-    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/333c9623-dc65-477b-bb12-2592cc13cab9" width="400"></td>
-    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/d5313bcb-7fd4-409b-a91d-138c16be00ef" width="400"></td>
-  </tr>
-  <tr>
-    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/258311cd-86b3-4289-808d-e00f9fa7f9f0" width="400"></td>
-    <td style="padding:5px;"><img src="https://github.com/user-attachments/assets/26809294-d6b9-4e26-93b7-8ae029c04bf4" width="400"></td>
-  </tr>
-</table>
+## Project info
 
-https://www.figma.com/board/IIbpdJCVx2XHQXytHNSfRx/Welcome-to-FigJam?node-id=0-1&t=ipcFRu2oPIupW2ir-1
+**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
-# فاز ۱ — وظایف تیم‌ها
+## How can I edit this code?
 
-## 🟦 تیم 1 — Architecture & API
-**مسئولیت‌ها:**
-- طراحی C4 diagrams (Context, Container, Component) برای کل سیستم
-- نوشتن تصمیمات اصلی معماری (ADRs)
-- طراحی APIهای اصلی سرویس‌ها
-- هماهنگی بین تیم‌ها
+There are several ways of editing your application.
 
-## 🟩 تیم 2 — Database & Multi-Tenancy (Schema-per-Tenant)
-**مسئولیت‌ها:**
-- طراحی مدل داده‌ها و ERD
-- تصمیم‌گیری درباره multi-tenancy
-- طراحی ساختار migrationها
-- نوشتن مستند دیتابیس
+**Use Lovable**
 
-## 🟨 تیم 3 — Backend Microservices (Auth, Resource, Booking, Marketplace)
-**مسئولیت‌ها:**
-- پیاده‌سازی اسکلت اصلی سرویس‌ها
-- اتصال به RabbitMQ
-- پیاده‌سازی Saga برای Marketplace
-- جلوگیری از Overbooking
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
-## 🟧 تیم 4 — Infra & Messaging (RabbitMQ, Redis, Docker, Monitoring)
-**مسئولیت‌ها:**
-- تنظیمات RabbitMQ (Exchanges, Queues)
-- تنظیمات Redis برای caching
-- Prometheus و Grafana
-- Docker-compose کامل پروژه
+Changes made via Lovable will be committed automatically to this repo.
 
-------------------------------
+**Use your preferred IDE**
 
-# Architectural Decision
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-## 1. Context
-پلتفرم باید شامل چندین سرویس مستقل با بار متفاوت، نیازمندی‌های تراکنشی (رزرو/پرداخت)، جریان‌های رویدادمحور، الگوهای مقاومتی، و Multi-Tenancy باشد.  
-تمام سرویس‌ها باید امکان استقرار مستقل، مقیاس‌پذیری افقی، و جداسازی خطا داشته باشند.  
-در عین حال تیم باید بتواند معماری را در بازه زمانی محدود پیاده‌سازی کند بدون اینکه پیچیدگی ابزارها مانع تحویل شود.
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
----
+Follow these steps:
 
-## 2. Problem
-پروژه نیازمند مجموعه‌ای از قابلیت‌های معماری است که بدون انتخاب صحیح تکنولوژی، احتمال شکست یا ناپایداری بالا می‌رود:
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
-- تراکنش‌های قابل‌اتکا در محیط توزیع‌شده  
-- جلوگیری از Overbooking و ناسازگاری داده  
-- ارتباط‌های بین‌سرویسی با حداقل کوپلینگ  
-- مقاومت در برابر failure chain  
-- مدیریت Multi-Tenancy در لایه داده  
-- نیاز به کش، event processing و پردازش لحظه‌ای  
-- نیاز به API Gateway، Discovery، Config Centralization  
-- امکان توسعه‌پذیری برای تیم با تجربه متوسط  
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-هدف این تصمیم تعیین ستون‌های تکنولوژیک است که ریسک تحویل و عملکرد سیستم را حداقل کند.
+# Step 3: Install the necessary dependencies.
+npm i
 
----
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
+```
 
-## 3. Forces
-تصمیم باید بین چند نیروی متضاد تعادل ایجاد کند:
+**Edit a file directly in GitHub**
 
-- پیچیدگی ↔ سرعت توسعه  
-- قابلیت اعتماد تراکنشی ↔ سادگی دیتابیس  
-- ایزوله‌سازی Tenantها ↔ هزینه عملیاتی  
-- اندازه و تجربه تیم ↔ نیازهای معماری  
-- مدیریت‌پذیری بلندمدت ↔ فشار تحویل کوتاه‌مدت  
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-همچنین پیامد نادیده‌گرفتن الگوهای مقاومتی و ابزارهای توزیع‌شده (cascade failure، timeout، مشکل debug) باید در نظر گرفته شود.
+**Use GitHub Codespaces**
 
----
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## 4. Decision
-تکنولوژی‌ها و الگوهای زیر برای هسته سیستم انتخاب شدند:
+## What technologies are used for this project?
 
-### **Application Layer**
-- Spring Boot برای هر سرویس
+This project is built with:
 
-### **Distributed System Capabilities (Spring Cloud)**
-- API Gateway  
-- Service Discovery (Eureka)  
-- Config Server  
-- Load Balancer  
-- Resilience4j (Circuit Breaker / Retry / Bulkhead)  
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-### **Data Layer**
-- SQL Database (PostgreSQL یا MySQL)  
-- Multi-Tenancy: **Schema-Per-Tenant**  
-- Database-Per-Service برای جداسازی bounded context  
-- Redis برای caching، ephemeral state و event buffers  
+## How can I deploy this project?
 
-### **Messaging**
-- RabbitMQ برای ارتباط غیرهمزمان و EDA  
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
-### **Integration**
-- OpenFeign برای ارتباط همزمان بین سرویس‌ها  
-- الگوی **Transactional Outbox + Events** برای پیاده‌سازی Saga  
+## Can I connect a custom domain to my Lovable project?
 
-### **Security**
-- JWT برای احراز هویت  
-- RBAC برای مدیریت سطح دسترسی  
+Yes, you can!
 
----
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-## 5. Rationale
-- **Spring Boot** کمترین friction را برای ساخت سرویس مستقل ارائه می‌دهد و نسبت به Node/Nest یا Go هماهنگی بسیار بهتری با الگوهای تراکنشی و امنیتی دارد.  
-- **Spring Cloud** تنها گزینه بالغ در اکوسیستم جاوا برای سیستم‌های توزیع‌شده است؛ ساخت Gateway یا Circuit Breaker به‌صورت دستی ریسک زیادی دارد.  
-- **SQL** قابل‌اعتمادترین گزینه برای تراکنش‌های حیاتی مانند رزرو و پرداخت است؛ NoSQL در Isolation و جلوگیری از Overbooking ضعف دارد.  
-- **Schema-Per-Tenant** تعادل مناسبی بین ایزوله‌سازی و هزینه عملیاتی ایجاد می‌کند.  
-- **RabbitMQ** پیچیدگی Kafka را ندارد و برای EDA این پروژه کافی است.  
-- **Redis** فشار بار را از دیتابیس برمی‌دارد و نیازهای real-time را پوشش می‌دهد.  
-- **Resilience4j** الگوهای مقاومتی استاندارد ارائه می‌کند.  
-- **OpenFeign** توسعه ارتباطات بین‌سرویسی را ساده و maintainable نگه می‌دارد.  
-- **JWT + RBAC** امنیت سبک و سازگار با Gateway فراهم می‌کند بدون نیاز به مدیریت session.
-
----
-
-## 6. Consequences
-
-### Positive
-- سرویس‌ها مستقل، قابل‌مقیاس و مقاوم در برابر خطا هستند.  
-- تراکنش‌های توزیع‌شده قابل‌اتکا و قابل‌ردیابی می‌شوند.  
-- کوپلینگ بین سرویس‌ها کم می‌شود.  
-- مدیریت Tenantها ساده‌تر و قابل‌کنترل باقی می‌ماند.  
-- سیستم بار بالا را بدون تغییر معماری تحمل می‌کند.  
-- ریسک فنی پروژه کاهش می‌یابد و تمرکز تیم روی منطق کسب‌وکار باقی می‌ماند.
-
-### Negative
-- Spring Cloud نیازمند یادگیری بیشتر است.  
-- چندین دیتابیس و چندین schema مدیریت را سنگین‌تر می‌کند.  
-- RabbitMQ نیازمند مانیتورینگ قوی است.  
-- هزینه DevOps نسبت به Monolith بیشتر است.
-
----
-
-## 7. Alternatives Considered
-
-### **Node.js / NestJS**
-- ضعف در تراکنش‌های توزیع‌شده  
-- نبود ابزارهای enterprise-grade برای Resilience  
-- نگه‌داری دشوارتر تحت بار بالا  
-
-### **NoSQL**
-- پشتیبانی ناکافی از ACID برای رزرو/پرداخت  
-- پیچیدگی زیاد در پیاده‌سازی Multi-Tenancy  
-
-### **Kafka**
-- پیچیدگی بیش از نیاز پروژه  
-- هزینه راه‌اندازی و مانیتورینگ بالا  
-- بدون ارزش افزوده برای workload فعلی  
-
----
-
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

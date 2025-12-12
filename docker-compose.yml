@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-https://afyhkxiiiloxrxkdmldc.supabase.co}
+        - VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmeWhreGlpaWxveHJ4a2RtbGRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0ODY5MTgsImV4cCI6MjA4MTA2MjkxOH0.IhiIiY4Z6qUJJvrLJnoQ6nMtREtYFyywKGHRvFFDu1A}
+        - VITE_SUPABASE_PROJECT_ID=${VITE_SUPABASE_PROJECT_ID:-afyhkxiiiloxrxkdmldc}
+    container_name: project-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Development service (optional - uncomment to use)
+  # frontend-dev:
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile.dev
+  #   container_name: project-frontend-dev
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-https://afyhkxiiiloxrxkdmldc.supabase.co}
+  #     - VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmeWhreGlpaWxveHJ4a2RtbGRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0ODY5MTgsImV4cCI6MjA4MTA2MjkxOH0.IhiIiY4Z6qUJJvrLJnoQ6nMtREtYFyywKGHRvFFDu1A}
+  #     - VITE_SUPABASE_PROJECT_ID=${VITE_SUPABASE_PROJECT_ID:-afyhkxiiiloxrxkdmldc}
+  #   command: npm run dev
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
