@@ -5,7 +5,7 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/authdb
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres-auth:5432/authdb}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
   jpa:
@@ -16,4 +16,9 @@ spring:
 logging:
   level:
     com.smartcampus.auth: DEBUG
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:changeme-smart-campus-secret}
+    expiration-minutes: 120
 

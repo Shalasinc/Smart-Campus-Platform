@@ -1,0 +1,10 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: dashboard-service
+
+logging:
+  level:
+    com.smartcampus.dashboard: DEBUG

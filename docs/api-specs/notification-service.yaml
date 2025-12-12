@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Notification Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8088/api/notifications
+paths:
+  /send:
+    post:
+      summary: Send notification (mock)
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '202': { description: Accepted }
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

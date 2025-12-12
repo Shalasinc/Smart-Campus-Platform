@@ -1,0 +1,8 @@
+CREATE TABLE user_profile (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    full_name VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    role VARCHAR(20) NOT NULL
+);
+

@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: API Gateway Contracts
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /auth/**:
+    get:
+      summary: Proxy to Auth Service (public login endpoints only)
+  /courses/**:
+    get:
+      summary: Routed to Course Service, JWT + tenant enforced
+  /exams/**:
+    get:
+      summary: Routed to Exam Service with RBAC filter
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

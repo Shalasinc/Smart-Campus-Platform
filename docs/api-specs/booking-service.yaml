@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: Resource & Booking Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8085/api
+paths:
+  /resources:
+    get:
+      summary: List resources
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200': { description: OK }
+  /bookings:
+    post:
+      summary: Create booking with optimistic lock
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '201': { description: Booked }
+    get:
+      summary: List bookings by tenant
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

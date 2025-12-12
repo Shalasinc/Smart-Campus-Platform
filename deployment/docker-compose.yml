@@ -1,5 +1,240 @@
-version: '3.8'
-
 services:
-  # Add your services here
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  # Databases (schema-per-tenant inside each DB)
+  postgres-auth:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+    volumes: [postgres-auth-data:/var/lib/postgresql/data]
+
+  postgres-user:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5434:5432"]
+    volumes: [postgres-user-data:/var/lib/postgresql/data]
+
+  postgres-course:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: coursedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5439:5432"]
+    volumes: [postgres-course-data:/var/lib/postgresql/data]
+
+  postgres-booking:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: bookingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5433:5432"]
+    volumes: [postgres-booking-data:/var/lib/postgresql/data]
+
+  marketplace-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: marketplacedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5435:5432"]
+    volumes: [postgres-marketplace-data:/var/lib/postgresql/data]
+
+  exam-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: examdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5436:5432"]
+    volumes: [postgres-exam-data:/var/lib/postgresql/data]
+
+  notification-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5437:5432"]
+    volumes: [postgres-notification-data:/var/lib/postgresql/data]
+
+  auth-service:
+    build:
+      context: ..
+      dockerfile: services/auth-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/authdb
+      JWT_SECRET: changeme-smart-campus-secret
+    ports: ["8081:8081"]
+    depends_on: [postgres-auth]
+
+  user-service:
+    build:
+      context: ..
+      dockerfile: services/user-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/userdb
+    ports: ["8082:8082"]
+    depends_on: [postgres-user]
+
+  course-service-a:
+    build:
+      context: ..
+      dockerfile: services/course-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-course:5432/coursedb
+      REDIS_HOST: redis
+    depends_on: [postgres-course, redis]
+
+  course-service-b:
+    build:
+      context: ..
+      dockerfile: services/course-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-course:5432/coursedb
+      REDIS_HOST: redis
+    depends_on: [postgres-course, redis]
+
+  course-lb:
+    image: nginx:1.27
+    volumes:
+      - ./nginx.course.conf:/etc/nginx/nginx.conf:ro
+    depends_on: [course-service-a, course-service-b]
+    ports:
+      - "8084:8084"
+
+  booking-service:
+    build:
+      context: ..
+      dockerfile: services/resource-booking-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-booking:5432/bookingdb
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports: ["8085:8085"]
+    depends_on: [postgres-booking, rabbitmq]
+
+  marketplace-service:
+    build:
+      context: ..
+      dockerfile: services/marketplace-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://marketplace-db:5432/marketplacedb
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports: ["8086:8086"]
+    depends_on: [marketplace-db, rabbitmq]
+
+  exam-service:
+    build:
+      context: ..
+      dockerfile: services/exam-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://exam-db:5432/examdb
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports: ["8087:8087"]
+    depends_on: [exam-db, rabbitmq]
+
+  notification-service:
+    build:
+      context: ..
+      dockerfile: services/notification-service/Dockerfile
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://notification-db:5432/notificationdb
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports: ["8088:8088"]
+    depends_on: [notification-db, rabbitmq]
+
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: api-gateway/Dockerfile
+    environment:
+      JWT_SECRET: changeme-smart-campus-secret-key-2024-minimum-32-chars
+      COURSE_LB_URL: http://course-lb:8084
+      REDIS_HOST: redis
+    ports: ["8080:8080"]
+    depends_on:
+      - auth-service
+      - booking-service
+      - course-lb
+
+  dashboard-service:
+    build:
+      context: ..
+      dockerfile: services/dashboard-service/Dockerfile
+    ports: ["8089:8089"]
+    depends_on: [api-gateway]
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    # host port adjusted to avoid conflicts on Windows; pick a high, likely-free port
+    ports: ["9190:9090"]
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports: ["3002:3000"]
+    depends_on: [prometheus]
+
+volumes:
+  postgres-auth-data:
+  postgres-booking-data:
+  postgres-user-data:
+  postgres-marketplace-data:
+  postgres-exam-data:
+  postgres-notification-data:
+  postgres-course-data:
+  prometheus-data:
+  grafana-data:
 

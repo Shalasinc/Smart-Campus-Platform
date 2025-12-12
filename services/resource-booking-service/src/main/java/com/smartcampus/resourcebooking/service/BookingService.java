@@ -43,5 +43,20 @@ public class BookingService {
 
         return bookingRepository.save(booking);
     }
+
+    @Transactional
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+            return;
+        }
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+    }
+
+    public java.util.List<Booking> getBookingsByResource(Long resourceId) {
+        return bookingRepository.findByResource_Id(resourceId);
+    }
 }
 

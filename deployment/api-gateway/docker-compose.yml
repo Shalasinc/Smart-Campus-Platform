@@ -1,0 +1,10 @@
+services:
+  api-gateway:
+    build:
+      context: ../..
+      dockerfile: api-gateway/Dockerfile
+    environment:
+      JWT_SECRET: changeme-smart-campus-secret
+    ports:
+      - "8080:8080"
+

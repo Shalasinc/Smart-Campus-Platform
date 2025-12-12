@@ -1,0 +1,32 @@
+%% C4 Context Diagram (Mermaid)
+graph TD
+    Client[[Client (Web/Mobile)]] -->|HTTPS| NginxLB
+    NginxLB --> APIGateway[API Gateway]
+    APIGateway --> AuthSvc[Auth Service]
+    APIGateway --> UserSvc[User Service]
+    APIGateway --> CourseSvc[Course Service]
+    APIGateway --> ExamSvc[Exam Service]
+    APIGateway --> MarketSvc[Marketplace Service]
+    APIGateway --> BookingSvc[Resource & Booking Service]
+    APIGateway --> NotifSvc[Notification Service]
+    APIGateway --> DashboardSvc[Dashboard Service]
+
+    MarketSvc --> RabbitMQ[(RabbitMQ)]
+    ExamSvc --> RabbitMQ
+    BookingSvc --> RabbitMQ
+    NotifSvc --> RabbitMQ
+
+    AuthSvc --> Postgres[(PostgreSQL)]
+    UserSvc --> Postgres
+    CourseSvc --> Postgres
+    ExamSvc --> Postgres
+    MarketSvc --> Postgres
+    BookingSvc --> Postgres
+    NotifSvc --> Postgres
+
+    APIGateway --> Redis[(Redis Cache)]
+    DashboardSvc --> Prometheus[(Prometheus/Grafana)]
+
+    classDef svc fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px;
+    class AuthSvc,UserSvc,CourseSvc,ExamSvc,MarketSvc,BookingSvc,NotifSvc,DashboardSvc,APIGateway svc;
+

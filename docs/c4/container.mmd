@@ -1,0 +1,64 @@
+%% C4 Container Diagram (Mermaid)
+graph LR
+    subgraph Ingress
+        NginxLB[NGINX Load Balancer]
+        APIGateway[Spring Cloud Gateway]
+    end
+    subgraph Core Services
+        AuthSvc[Auth Service]
+        UserSvc[User Service]
+        CourseSvc[Course Service x2 replicas]
+        ExamSvc[Exam Service]
+        MarketSvc[Marketplace/Order Service]
+        InventorySvc[Inventory Service]
+        BookingSvc[Resource & Booking Service]
+        NotifSvc[Notification Service]
+        DashboardSvc[Dashboard Service]
+    end
+    subgraph Data
+        Postgres[(PostgreSQL - schema per tenant)]
+        Redis[(Redis Cache/Rate Limit)]
+        Rabbit[(RabbitMQ Topic Exchanges)]
+    end
+    subgraph Observability
+        Prom[Prometheus]
+        Graf[Grafana]
+    end
+
+    Client[[Browser SPA]] -->|HTTPS| NginxLB --> APIGateway
+    APIGateway --> AuthSvc
+    APIGateway --> UserSvc
+    APIGateway --> CourseSvc
+    APIGateway --> ExamSvc
+    APIGateway --> MarketSvc
+    APIGateway --> InventorySvc
+    APIGateway --> BookingSvc
+    APIGateway --> NotifSvc
+    APIGateway --> DashboardSvc
+
+    ExamSvc -.exam.started.-> Rabbit
+    MarketSvc -.order.created/payment.succeeded/order.confirmed.-> Rabbit
+    InventorySvc -.inventory.reserved/released.-> Rabbit
+    NotifSvc -.subscribes.-> Rabbit
+    BookingSvc -.booking.events.-> Rabbit
+
+    AuthSvc --> Postgres
+    UserSvc --> Postgres
+    CourseSvc --> Postgres
+    ExamSvc --> Postgres
+    MarketSvc --> Postgres
+    InventorySvc --> Postgres
+    BookingSvc --> Postgres
+    NotifSvc --> Postgres
+    CourseSvc --> Redis
+    ExamSvc --> Redis
+    APIGateway --> Redis
+
+    DashboardSvc --> Prom
+    Prom --> Graf
+
+    classDef svc fill:#e3f2fd,stroke:#1e88e5;
+    classDef data fill:#f1f8e9,stroke:#558b2f;
+    class AuthSvc,UserSvc,CourseSvc,ExamSvc,MarketSvc,InventorySvc,BookingSvc,NotifSvc,DashboardSvc,APIGateway svc;
+    class Postgres,Redis,Rabbit data;
+

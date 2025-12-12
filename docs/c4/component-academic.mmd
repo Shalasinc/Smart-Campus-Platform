@@ -1,0 +1,23 @@
+%% Component view (Exam + Marketplace Saga)
+graph TD
+    APIGateway --> ExamAPI[Exam Controller]
+    ExamAPI --> ExamSvc[Exam Service]
+    ExamSvc --> ExamRepo[(ExamRepository)]
+    ExamSvc -. Resilience4j CB .-> NotifClient[Notification REST Client]
+    ExamSvc -. publish .-> RabbitMQ[(RabbitMQ topic: exam.events)]
+    Student[[Student]] --> APIGateway
+    Professor[[Professor]] --> APIGateway
+
+    APIGateway --> OrderAPI[Order Controller]
+    OrderAPI --> OrderSvc[Order Service (Saga orchestrator)]
+    OrderSvc -. publish order.created .-> RabbitMQ2[(RabbitMQ topic: order.events)]
+    RabbitMQ2 -. inventory.reserved .-> OrderSvc
+    OrderSvc --> PaymentMock[Payment Adapter]
+    OrderSvc --> OrderRepo[(OrderRepository)]
+    InventorySvc[Inventory Service] -. inventory.reserved/released .-> RabbitMQ2
+    OrderSvc -. order.confirmed/cancelled .-> RabbitMQ2
+    NotifSvc[Notification Service] -. consumes exam.started/order.confirmed .-> RabbitMQ2
+
+    classDef component fill:#fff3e0,stroke:#ef6c00;
+    class ExamAPI,ExamSvc,OrderAPI,OrderSvc,PaymentMock,NotifClient component;
+

@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: User Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082/api/users
+paths:
+  /profiles:
+    get:
+      summary: List users (ADMIN only)
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: header
+          name: X-Tenant-Id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Users in tenant
+  /profiles/{id}:
+    get:
+      summary: Get user profile
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

@@ -1,0 +1,49 @@
+openapi: 3.0.3
+info:
+  title: Auth Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+paths:
+  /auth/login:
+    post:
+      summary: Issue JWT for user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: JWT issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  refreshToken: { type: string }
+  /auth/refresh:
+    post:
+      summary: Rotate access token
+      responses:
+        '200':
+          description: New token
+  /auth/admin/users:
+    post:
+      summary: Admin creates user (no self sign-up)
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '201':
+          description: User created
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

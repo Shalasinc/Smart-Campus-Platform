@@ -1,0 +1,36 @@
+openapi: 3.0.3
+info:
+  title: Marketplace / Order Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8086/api
+paths:
+  /products:
+    get:
+      summary: List products by tenant
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create product (ADMIN)
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '201': { description: Created }
+  /orders:
+    post:
+      summary: Create order (starts Saga)
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '202': { description: Saga started }
+    get:
+      summary: List orders for user
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
