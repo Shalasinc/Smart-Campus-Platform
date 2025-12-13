@@ -17,6 +17,7 @@ import Shuttle from "./pages/Shuttle";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import Demo from "./pages/Demo";
+import SagaViewer from "./pages/SagaViewer";
 import NotFound from "./pages/NotFound";
 
 // Layout
@@ -72,6 +73,7 @@ const AppRoutes = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />
         <Route path="/demo" element={<Demo />} />
+        <Route path="/saga" element={<SagaViewer />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

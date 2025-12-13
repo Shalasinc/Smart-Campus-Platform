@@ -110,3 +110,4 @@ Closed? → Yes → Execute Request → Success? → Yes → Return Result
 - [Circuit Breaker Pattern - Martin Fowler](https://martinfowler.com/bliki/CircuitBreaker.html)
 - [Resilience4j Documentation](https://resilience4j.readme.io/docs/circuitbreaker)
 
+

@@ -105,3 +105,4 @@ CREATE INDEX IF NOT EXISTS idx_bookings_room ON bookings(room_id);
 CREATE INDEX IF NOT EXISTS idx_bookings_user ON bookings(user_id);
 CREATE INDEX IF NOT EXISTS idx_bookings_time ON bookings(start_time, end_time);
 
+

@@ -62,3 +62,4 @@ psql -h localhost -U postgres -d smartcampus
 2. فایل‌های migration در `docker-entrypoint-initdb.d` به صورت خودکار اجرا می‌شوند
 3. برای تغییرات بعدی، migration جدید ایجاد کنید
 
+

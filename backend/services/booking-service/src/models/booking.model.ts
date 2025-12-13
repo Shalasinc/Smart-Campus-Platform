@@ -87,3 +87,4 @@ export const checkBookingConflict = async (
   return parseInt(result.rows[0].count) > 0;
 };
 
+

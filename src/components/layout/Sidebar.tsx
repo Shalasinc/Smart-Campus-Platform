@@ -16,6 +16,7 @@ import {
   Building2,
   Bell,
   TestTube,
+  GitBranch,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
     { icon: Cpu, label: 'IoT Dashboard', path: '/iot' },
     { icon: Bus, label: 'Shuttle Tracking', path: '/shuttle' },
     { icon: TestTube, label: 'Demo & Tests', path: '/demo' },
+    { icon: GitBranch, label: 'Saga Viewer', path: '/saga' },
     { icon: Users, label: 'Users', path: '/users', adminOnly: true },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];

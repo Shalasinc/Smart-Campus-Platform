@@ -9,3 +9,4 @@ router.get('/', authenticateToken, getNotificationsHandler);
 
 export default router;
 
+

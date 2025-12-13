@@ -33,3 +33,4 @@ export const getRoomById = async (id: string): Promise<Room | null> => {
   return result.rows[0] || null;
 };
 
+

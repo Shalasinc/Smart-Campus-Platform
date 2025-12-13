@@ -10,3 +10,4 @@ router.post('/', authenticateToken, createProductHandler);
 
 export default router;
 
+

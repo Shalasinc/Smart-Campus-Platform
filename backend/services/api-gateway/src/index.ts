@@ -27,47 +27,83 @@ const proxyOptions = {
     console.error('Proxy error:', err);
     res.status(503).json({ error: 'Service unavailable' });
   },
-  onProxyReq: (proxyReq: any, req: any) => {
-    // Forward authorization header
-    if (req.headers.authorization) {
-      proxyReq.setHeader('authorization', req.headers.authorization);
-    }
-  },
 };
 
 // Routes
 app.use('/api/auth', createProxyMiddleware({
   target: AUTH_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/auth', '/auth') || '/auth';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/bookings', createProxyMiddleware({
   target: BOOKING_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/bookings', '/bookings') || '/bookings';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/rooms', createProxyMiddleware({
   target: BOOKING_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/rooms', '/rooms') || '/rooms';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/marketplace', createProxyMiddleware({
   target: MARKETPLACE_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/marketplace', '') || '/';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/inventory', createProxyMiddleware({
   target: INVENTORY_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/inventory', '/inventory') || '/inventory';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/payments', createProxyMiddleware({
   target: PAYMENT_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/payments', '/payments') || '/payments';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
 app.use('/api/notifications', createProxyMiddleware({
   target: NOTIFICATION_SERVICE_URL,
+  onProxyReq: (proxyReq, req) => {
+    proxyReq.path = req.url?.replace('/api/notifications', '/notifications') || '/notifications';
+    if (req.headers.authorization) {
+      proxyReq.setHeader('authorization', req.headers.authorization);
+    }
+  },
   ...proxyOptions,
 }));
 
@@ -79,4 +115,5 @@ app.get('/health', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 API Gateway running on port ${PORT}`);
 });
+
 

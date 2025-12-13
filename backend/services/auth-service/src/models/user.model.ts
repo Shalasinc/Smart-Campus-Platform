@@ -43,3 +43,4 @@ export const getUserById = async (id: string): Promise<User | null> => {
   return result.rows[0] || null;
 };
 
+

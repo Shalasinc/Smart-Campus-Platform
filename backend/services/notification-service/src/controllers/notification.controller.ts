@@ -88,3 +88,4 @@ export const getNotificationsHandler = async (req: Request, res: Response) => {
   }
 };
 
+

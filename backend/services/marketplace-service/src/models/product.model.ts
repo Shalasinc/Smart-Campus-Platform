@@ -64,3 +64,4 @@ export const updateProductStock = async (id: string, quantity: number): Promise<
   return result.rows[0] || null;
 };
 
+
