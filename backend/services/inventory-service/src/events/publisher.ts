@@ -1,4 +1,4 @@
-import amqp from 'amqplib';
+import * as amqp from 'amqplib';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,8 +11,20 @@ let channel: amqp.Channel | null = null;
 export const publishEvent = async (routingKey: string, message: any) => {
   if (!channel) {
     const connection = await amqp.connect(RABBITMQ_URL);
+    if (!connection) {
+      throw new Error('Failed to establish RabbitMQ connection');
+    }
+    
     channel = await connection.createChannel();
+    if (!channel) {
+      throw new Error('Failed to create RabbitMQ channel');
+    }
+    
     await channel.assertExchange(EXCHANGE_NAME, 'topic', { durable: true });
+  }
+
+  if (!channel) {
+    throw new Error('Channel is not available');
   }
 
   try {

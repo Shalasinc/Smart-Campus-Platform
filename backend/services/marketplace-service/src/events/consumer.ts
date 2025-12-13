@@ -1,4 +1,4 @@
-import amqp from 'amqplib';
+import * as amqp from 'amqplib';
 import dotenv from 'dotenv';
 
 dotenv.config();

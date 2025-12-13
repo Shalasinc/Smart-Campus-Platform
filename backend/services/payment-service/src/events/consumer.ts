@@ -1,4 +1,4 @@
-import amqp from 'amqplib';
+import * as amqp from 'amqplib';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,10 +9,17 @@ const EXCHANGE_NAME = 'smartcampus_events';
 let channel: amqp.Channel | null = null;
 let connection: amqp.Connection | null = null;
 
-export const connectRabbitMQ = async () => {
+export const connectRabbitMQ = async (): Promise<amqp.Channel> => {
   try {
     connection = await amqp.connect(RABBITMQ_URL);
+    if (!connection) {
+      throw new Error('Failed to establish RabbitMQ connection');
+    }
+    
     channel = await connection.createChannel();
+    if (!channel) {
+      throw new Error('Failed to create RabbitMQ channel');
+    }
     
     await channel.assertExchange(EXCHANGE_NAME, 'topic', { durable: true });
     
@@ -26,24 +33,30 @@ export const connectRabbitMQ = async () => {
 
 export const consumeEvents = async (routingKey: string, handler: (message: any) => Promise<void>) => {
   if (!channel) {
-    await connectRabbitMQ();
+    channel = await connectRabbitMQ();
+  }
+
+  if (!channel) {
+    throw new Error('Channel is not available');
   }
 
   try {
-    const queue = await channel!.assertQueue('', { exclusive: true });
-    await channel!.bindQueue(queue.queue, EXCHANGE_NAME, routingKey);
+    const queue = await channel.assertQueue('', { exclusive: true });
+    await channel.bindQueue(queue.queue, EXCHANGE_NAME, routingKey);
     
     console.log(`👂 Listening for events: ${routingKey}`);
     
-    channel!.consume(queue.queue, async (msg) => {
-      if (msg) {
+    channel.consume(queue.queue, async (msg) => {
+      if (msg && channel) {
         try {
           const message = JSON.parse(msg.content.toString());
           await handler(message);
-          channel!.ack(msg);
+          channel.ack(msg);
         } catch (error) {
           console.error('❌ Error processing message:', error);
-          channel!.nack(msg, false, false);
+          if (channel) {
+            channel.nack(msg, false, false);
+          }
         }
       }
     });
