@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   Building2,
   Bell,
+  TestTube,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,6 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
     { icon: GraduationCap, label: 'E-Learning', path: '/learning' },
     { icon: Cpu, label: 'IoT Dashboard', path: '/iot' },
     { icon: Bus, label: 'Shuttle Tracking', path: '/shuttle' },
+    { icon: TestTube, label: 'Demo & Tests', path: '/demo' },
     { icon: Users, label: 'Users', path: '/users', adminOnly: true },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];

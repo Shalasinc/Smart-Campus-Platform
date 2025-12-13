@@ -16,6 +16,7 @@ import IoT from "./pages/IoT";
 import Shuttle from "./pages/Shuttle";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
+import Demo from "./pages/Demo";
 import NotFound from "./pages/NotFound";
 
 // Layout
@@ -70,6 +71,7 @@ const AppRoutes = () => {
         <Route path="/shuttle" element={<Shuttle />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/demo" element={<Demo />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
