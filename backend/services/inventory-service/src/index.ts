@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import inventoryRoutes from './routes/inventory.routes';
 import { connectRabbitMQ, consumeEvents } from './events/consumer';
-import { reserveInventory, releaseInventory } from './controllers/inventory.controller';
+import { reserveInventory, releaseInventoryHandler } from './controllers/inventory.controller';
 
 dotenv.config();
 

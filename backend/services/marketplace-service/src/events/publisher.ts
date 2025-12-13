@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 let channel: amqp.Channel | null = null;
-let connection: amqp.Connection | null = null;
+let connection: any = null;
 
 const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://admin:admin@rabbitmq:5672';
 const EXCHANGE_NAME = 'smartcampus_events';
@@ -54,7 +54,9 @@ export const publishEvent = async (routingKey: string, message: any) => {
 // Graceful shutdown
 process.on('SIGINT', async () => {
   if (channel) await channel.close();
-  if (connection) await connection.close();
+  if (connection && typeof connection.close === 'function') {
+    await connection.close();
+  }
   process.exit(0);
 });
 

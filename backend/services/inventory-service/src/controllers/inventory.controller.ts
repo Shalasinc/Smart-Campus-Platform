@@ -41,5 +41,6 @@ export const releaseInventoryHandler = async (req: Request, res: Response) => {
 };
 
 // Export for use in event handlers
-export { reserveInventory, releaseReservation };
+export { reserveInventory };
+export const releaseInventory = releaseReservation;
 

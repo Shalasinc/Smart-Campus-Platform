@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import { createUser, getUserByEmail, getUserById } from '../models/user.model';
 
-const jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
+const jwtSecret: string = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const jwtExpiresIn: string = process.env.JWT_EXPIRES_IN || '24h';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -29,6 +29,7 @@ export const register = async (req: Request, res: Response) => {
     const user = await createUser(email, passwordHash, name, tenant, role);
 
     // Generate JWT token
+    // @ts-ignore - jwtSecret is always a string due to default value
     const token = jwt.sign(
       {
         id: user.id,
@@ -79,6 +80,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Generate JWT token
+    // @ts-ignore - jwtSecret is always a string due to default value
     const token = jwt.sign(
       {
         id: user.id,

@@ -7,7 +7,7 @@ const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://admin:admin@rabbitmq:56
 const EXCHANGE_NAME = 'smartcampus_events';
 
 let channel: amqp.Channel | null = null;
-let connection: amqp.Connection | null = null;
+let connection: any = null;
 
 export const connectRabbitMQ = async (): Promise<amqp.Channel> => {
   try {
