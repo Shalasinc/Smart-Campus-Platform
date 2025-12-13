@@ -1,0 +1,49 @@
+import amqp from 'amqplib';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+let channel: amqp.Channel | null = null;
+let connection: amqp.Connection | null = null;
+
+const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://admin:admin@rabbitmq:5672';
+const EXCHANGE_NAME = 'smartcampus_events';
+
+export const connectRabbitMQ = async () => {
+  try {
+    connection = await amqp.connect(RABBITMQ_URL);
+    channel = await connection.createChannel();
+    
+    // Declare exchange
+    await channel.assertExchange(EXCHANGE_NAME, 'topic', { durable: true });
+    
+    console.log('✅ RabbitMQ Exchange declared:', EXCHANGE_NAME);
+    return channel;
+  } catch (error) {
+    console.error('❌ RabbitMQ connection error:', error);
+    throw error;
+  }
+};
+
+export const publishEvent = async (routingKey: string, message: any) => {
+  if (!channel) {
+    await connectRabbitMQ();
+  }
+
+  try {
+    const messageBuffer = Buffer.from(JSON.stringify(message));
+    channel!.publish(EXCHANGE_NAME, routingKey, messageBuffer, { persistent: true });
+    console.log(`📤 Event published: ${routingKey}`, message);
+  } catch (error) {
+    console.error('❌ Error publishing event:', error);
+    throw error;
+  }
+};
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  if (channel) await channel.close();
+  if (connection) await connection.close();
+  process.exit(0);
+});
+
